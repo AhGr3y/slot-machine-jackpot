@@ -7,7 +7,31 @@
     <title>Slot Machine Jackpot</title>
 </head>
 <body>
-    <h1>Slot Machine Jackpot</h1>
+    <div id="counter-container">
+        <div>JACKPOT: <span id="counter">$0</span></div>
+    </div>
+
+    <div id="slots-container">
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+    </div>
+
+    <div id="hit-button-container">
+        <button id="hit-button">Hit!</button>
+    </div>
+
+    <div id="incrementer-container">
+        <button id="decrementer">-</button>
+        <!-- Add text input -->
+         <form action="">
+            <input id="amount-to-change" type="text" value="100">
+        </form>
+        <button id="incrementer">+</button>
+    </div>
+
     <!-- Linking external script -->
     <script src="javascript.js" defer></script>
 </body>
