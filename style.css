@@ -79,6 +79,13 @@ body {
     width: 230px;
     border: 1px solid black;
     flex: auto;
+    overflow: hidden;
+}
+
+#hit-button,
+#incrementer,
+#decrementer {
+    cursor: pointer;
 }
 
 #incrementer-container {
