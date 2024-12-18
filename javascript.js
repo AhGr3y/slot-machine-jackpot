@@ -10,7 +10,8 @@ const amountToChange = document.querySelector("#amount-to-change");
 const incrementer = document.querySelector("#incrementer");
 const decrementer = document.querySelector("#decrementer");
 const numOfTokens = 32;
-const totalSlots = 5;
+const totalSlots = 3;
+const spinDuration = 6000;
 
 let slotNumber = 1;
 let slotTokensHeight = 0;
@@ -19,7 +20,8 @@ let slotTokensHeight = 0;
 // Button will change into 'Clear' when all slots are full,
 // which will empty all slots but keep jackpot the same.
 hitButton.addEventListener("click", (event) => {
-    if (slotNumber <= 5) {
+    if (slotNumber <= totalSlots) {
+
         let slot = document.querySelector(`#slot-${slotNumber}`);
 
         fillElement(slot, tokens, numOfTokens);
@@ -27,10 +29,10 @@ hitButton.addEventListener("click", (event) => {
         slot.animate(
             [
                 { transform: "translateY(0)" },
-                { transform: `translateY(-${slotTokensHeight - (slotTokensHeight * 2 / numOfTokens)}px)` },
+                { transform: `translateY(-${slotTokensHeight - (slotTokensHeight / numOfTokens)}px)` },
             ],
             {
-                duration: 6000,
+                duration: spinDuration,
                 easing: "cubic-bezier(0.42, 0, 0.1, 1.0)",
                 fill: "forwards",
             },
@@ -39,12 +41,10 @@ hitButton.addEventListener("click", (event) => {
         slotNumber += 1;
         slotTokensHeight = 0;
 
-        if (slotNumber > 5) {
+        if (slotNumber > totalSlots) {
             hitButton.textContent = "Clear";
         }
-    } else {
-        slotNumber = 1;
-        hitButton.textContent = "Hit!";
+    } else  {
         clearSlots();
     }
     
@@ -108,4 +108,7 @@ function clearSlots() {
         const slot = document.querySelector(`#slot-${i}`);
         slot.replaceChildren();
     }
+
+    slotNumber = 1;
+    hitButton.textContent = "Hit!";
 }
