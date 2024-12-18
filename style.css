@@ -53,3 +53,44 @@
   }
 
   /* END OF CSS RESET */
+
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+#counter {
+    color: red;
+}
+
+#slots-container {
+    width: 100%;
+    padding: 0 50px;
+    display: flex;
+    gap: 48px;
+}
+
+.slot {
+    height: 230px;
+    width: 230px;
+    border: 1px solid black;
+    flex: auto;
+}
+
+#incrementer-container {
+    display: flex;
+    gap: 25px;
+}
+
+#amount-to-change,
+#amount-to-change:focus {
+    border: none;
+    border-bottom: 1px solid black;
+    text-align: center;
+    outline: none;
+}
+

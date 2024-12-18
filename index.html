@@ -8,7 +8,7 @@
 </head>
 <body>
     <div id="counter-container">
-        <div>JACKPOT: <span id="counter">$0</span></div>
+        <div>JACKPOT: $<span id="counter">0</span></div>
     </div>
 
     <div id="slots-container">
@@ -25,10 +25,7 @@
 
     <div id="incrementer-container">
         <button id="decrementer">-</button>
-        <!-- Add text input -->
-         <form action="">
-            <input id="amount-to-change" type="text" value="100">
-        </form>
+        <input id="amount-to-change" type="text" value="0" onfocus="this.select()">
         <button id="incrementer">+</button>
     </div>
 
