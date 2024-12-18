@@ -10,25 +10,45 @@ const amountToChange = document.querySelector("#amount-to-change");
 const incrementer = document.querySelector("#incrementer");
 const decrementer = document.querySelector("#decrementer");
 const numOfTokens = 32;
+const totalSlots = 5;
 
 let slotNumber = 1;
-let slot = document.querySelector(`#slot-${slotNumber}`);
 let slotTokensHeight = 0;
 
-// Clicking the 'Hit!' button will spin one slot at a time
+// Clicking the 'Hit!' button will spin one slot at a time.
+// Button will change into 'Clear' when all slots are full,
+// which will empty all slots but keep jackpot the same.
 hitButton.addEventListener("click", (event) => {
-    fillElement(slot, tokens, numOfTokens);
-    slot.animate(
-        [
-            { transform: "translateY(0)" },
-            { transform: `translateY(-${slotTokensHeight - (slotTokensHeight * 2 / numOfTokens)}px)` },
-        ],
-        {
-            duration: 6000,
-            easing: "cubic-bezier(0.42, 0, 0.1, 1.0)",
-            fill: "forwards",
-        },
-    )
+    if (slotNumber <= 5) {
+        let slot = document.querySelector(`#slot-${slotNumber}`);
+
+        fillElement(slot, tokens, numOfTokens);
+
+        slot.animate(
+            [
+                { transform: "translateY(0)" },
+                { transform: `translateY(-${slotTokensHeight - (slotTokensHeight * 2 / numOfTokens)}px)` },
+            ],
+            {
+                duration: 6000,
+                easing: "cubic-bezier(0.42, 0, 0.1, 1.0)",
+                fill: "forwards",
+            },
+        )
+
+        slotNumber += 1;
+        slotTokensHeight = 0;
+
+        if (slotNumber > 5) {
+            hitButton.textContent = "Clear";
+        }
+    } else {
+        slotNumber = 1;
+        hitButton.textContent = "Hit!";
+        clearSlots();
+    }
+    
+    
 });
 
 // Button to add amount to jackpot
@@ -77,4 +97,15 @@ function fillElement(element, array, numOfChild) {
 function getRandomItem(array) {
     const randomIndex = Math.floor(Math.random() * array.length);
     return array[randomIndex];
+}
+
+function removeChildren(element) {
+    element.removeChildren();
+}
+
+function clearSlots() {
+    for (let i = 1; i <= totalSlots; i++) {
+        const slot = document.querySelector(`#slot-${i}`);
+        slot.replaceChildren();
+    }
 }
