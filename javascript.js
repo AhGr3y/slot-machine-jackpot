@@ -5,7 +5,7 @@ const tokens = [
 ];
 
 const counter = document.querySelector("#counter");
-const hitButton = document.querySelector("#hit-button");
+const hitButtonText = document.querySelector("#pushable-text");
 const amountToChange = document.querySelector("#amount-to-change");
 const incrementer = document.querySelector("#incrementer");
 const decrementer = document.querySelector("#decrementer");
@@ -19,7 +19,7 @@ let slotTokensHeight = 0;
 // Clicking the 'Hit!' button will spin one slot at a time.
 // Button will change into 'Clear' when all slots are full,
 // which will empty all slots but keep jackpot the same.
-hitButton.addEventListener("click", (event) => {
+hitButtonText.addEventListener("click", (event) => {
     if (slotNumber <= totalSlots) {
 
         let slot = document.querySelector(`#slot-${slotNumber}`);
@@ -42,7 +42,7 @@ hitButton.addEventListener("click", (event) => {
         slotTokensHeight = 0;
 
         if (slotNumber > totalSlots) {
-            hitButton.textContent = "Clear";
+            hitButtonText.textContent = "Clear";
         }
     } else  {
         clearSlots();
@@ -110,5 +110,5 @@ function clearSlots() {
     }
 
     slotNumber = 1;
-    hitButton.textContent = "Hit!";
+    hitButtonText.textContent = "Hit!";
 }
