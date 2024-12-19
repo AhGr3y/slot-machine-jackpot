@@ -33,7 +33,7 @@ hitButtonText.addEventListener("click", (event) => {
             ],
             {
                 duration: spinDuration,
-                easing: "cubic-bezier(0.42, 0, 0.1, 1.0)",
+                easing: "cubic-bezier(0.42, 0, 0.1, 1.03)",
                 fill: "forwards",
             },
         )
@@ -110,5 +110,5 @@ function clearSlots() {
     }
 
     slotNumber = 1;
-    hitButtonText.textContent = "Hit!";
+    hitButtonText.textContent = "Hit";
 }
