@@ -54,6 +54,11 @@
 
   /* END OF CSS RESET */
 
+::selection {
+    color: white;
+    background: hotpink;
+}
+
 body {
     height: 100vh;
     display: flex;
@@ -67,7 +72,7 @@ body {
     position: fixed;
     width: 100%;
     height: 100vh;
-    background-image: url(images/jackpot.jpg);
+    background-image: url(images/pink-jackpot.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -91,7 +96,7 @@ body {
     border: 1px solid black;
     flex: auto;
     overflow: hidden;
-    background-color: rgba(91, 92, 91, 0.8);
+    background-color: rgba(159, 159, 159, 0.7);
 }
 
 #slot-1,
@@ -207,20 +212,21 @@ body {
 
 #incrementer-container input {
     width: 200px;
-    color: black;
+    color: white;
     font-weight: 800;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.5);
 }
 
 #incrementer-container button {
-    font-size: 36px;
-    font-weight: 900;
-    background: none;
+    font-size: 42px;
+    font-weight: 1000;
+    color: white;
     border: none;
+    background: none;
 }
 
 #incrementer-container button:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
     transition: transform 300ms;
 }
 
@@ -246,10 +252,10 @@ body {
   
   @keyframes glow {
     from {
-      text-shadow: 0 0 10px #ffcf30, 0 0 20px #ffcf30, 0 0 30px #ffcf30, 0 0 40px #ffcf30, 0 0 50px #ffcf30, 0 0 60px #ffcf30, 0 0 70px #ffcf30;
+      text-shadow: 0 0 10px #ff47c88c, 0 0 20px #ff47c88c, 0 0 30px #ff47c88c, 0 0 40px #ff47c88c, 0 0 50px #ff47c88c, 0 0 60px #ff47c88c, 0 0 70px #ff47c88c;
     }
     
     to {
-      text-shadow: 0 0 20px #ffffff15, 0 0 30px #ffffff15, 0 0 40px #ffffff15, 0 0 50px #ffffff15, 0 0 60px #ffffff15, 0 0 70px #ffffff15, 0 0 80px #ffffff15;
+      text-shadow: 0 0 20px #ff47c8ea, 0 0 30px #ff47c8ea, 0 0 40px #ff47c8ea, 0 0 50px #ff47c8ea, 0 0 60px #ff47c8ea, 0 0 70px #ff47c8ea, 0 0 80px #ff47c8ea;
     }
   }
