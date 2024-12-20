@@ -200,8 +200,33 @@ body {
 }
 
 #incrementer-container {
+    font-size: 24px;
     display: flex;
     gap: 25px;
+}
+
+#incrementer-container input {
+    width: 200px;
+    color: black;
+    font-weight: 800;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+#incrementer-container button {
+    font-size: 36px;
+    font-weight: 900;
+    background: none;
+    border: none;
+}
+
+#incrementer-container button:hover {
+    transform: scale(1.2);
+    transition: transform 300ms;
+}
+
+#incrementer-container button:active {
+    transform: scale(0.8);
+    transition: transform 200ms;
 }
 
 #amount-to-change,
