@@ -4,28 +4,27 @@ const tokens = [
     "✌️",
 ];
 
-const counter = document.querySelector("#counter");
+const jackpot = document.querySelector("#counter");
+const hitButton = document.querySelector(".pushable");
 const hitButtonText = document.querySelector("#pushable-text");
 const amountToChange = document.querySelector("#amount-to-change");
 const incrementer = document.querySelector("#incrementer");
 const decrementer = document.querySelector("#decrementer");
 const numOfTokens = 32;
+const tokenSize = 150;
 const totalSlots = 3;
 const spinDuration = 6000;
 
 let slotNumber = 1;
 let slotTokensHeight = 0;
 
-// Clicking the 'Hit!' button will spin one slot at a time.
-// Button will change into 'Clear' when all slots are full,
+// Spin one slot at a time.
+// When all slots have tokens, change to 'Clear' button,
 // which will empty all slots but keep jackpot the same.
-hitButtonText.addEventListener("click", (event) => {
+hitButton.addEventListener("click", (event) => {
     if (slotNumber <= totalSlots) {
-
         let slot = document.querySelector(`#slot-${slotNumber}`);
-
-        fillElement(slot, tokens, numOfTokens);
-
+        fillSlot(slot);
         slot.animate(
             [
                 { transform: "translateY(0)" },
@@ -36,7 +35,7 @@ hitButtonText.addEventListener("click", (event) => {
                 easing: "cubic-bezier(0.42, 0, 0.1, 1.03)",
                 fill: "forwards",
             },
-        )
+        );
 
         slotNumber += 1;
         slotTokensHeight = 0;
@@ -47,60 +46,57 @@ hitButtonText.addEventListener("click", (event) => {
     } else  {
         clearSlots();
     }
-    
-    
 });
 
 // Button to add amount to jackpot
 incrementer.addEventListener("click", (event) => {
-    adjustCounter(amountToChange, "inc");
+    adjustJackpot("inc");
 });
 
 // Button to remove amount from jackpot
 decrementer.addEventListener("click", (event) => {
-    adjustCounter(amountToChange, "dec");
+    adjustJackpot("dec");
 });
 
 // Used by incrementer/decrementer to adjust jackpot amount
-function adjustCounter(valueString, type) {
-    const counterNum = Number(counter.textContent);
+function adjustJackpot(adjustType) {
+    const counterNum = Number(jackpot.textContent);
     const adjustBy = Number(amountToChange.value);
 
     let newCounter = 0;
 
-    if (type === "inc") {
+    if (adjustType === "inc") {
         newCounter = counterNum + adjustBy;
-    } else if (type === "dec") {
+    } else if (adjustType === "dec") {
         newCounter = counterNum - adjustBy;
         if (newCounter < 0) {
             newCounter = 0;
         }
     }
 
-    counter.textContent = newCounter;
+    jackpot.textContent = newCounter;
 }
 
-// Append children to element with items of an
-// array randomly, and update slotTokensHeight.
-function fillElement(element, array, numOfChild) {
-    for (let i = 0; i < numOfChild; i++) {
-        const randomItem = getRandomItem(array);
-        const div = document.createElement("div");
-        div.textContent = randomItem;
-        div.style.fontSize = "150px";
-        div.style.textAlign = "center";
-        element.appendChild(div);
-        slotTokensHeight += div.clientHeight;
+function getRandomToken() {
+    const randomIndex = Math.floor(Math.random() * tokens.length);
+    return tokens[randomIndex];
+}
+
+function createToken() {
+    const randomToken = getRandomToken();
+    const token = document.createElement("div");
+    token.textContent = randomToken;
+    token.style.fontSize = `${tokenSize}px`;
+    return token;
+}
+
+// Append tokens to slot randomly, and update slotTokensHeight.
+function fillSlot(slot) {
+    for (let i = 0; i < numOfTokens; i++) {
+        const token = createToken();
+        slot.appendChild(token);
+        slotTokensHeight += token.clientHeight;
     }
-}
-
-function getRandomItem(array) {
-    const randomIndex = Math.floor(Math.random() * array.length);
-    return array[randomIndex];
-}
-
-function removeChildren(element) {
-    element.removeChildren();
 }
 
 function clearSlots() {

@@ -94,6 +94,13 @@ body {
     background-color: rgba(91, 92, 91, 0.8);
 }
 
+#slot-1,
+#slot-2,
+#slot-3 {
+    text-align: center;
+    will-change: transform;
+}
+
 #incrementer,
 #decrementer {
     cursor: pointer;
@@ -120,6 +127,7 @@ body {
     background: hsl(0deg, 0%, 0%, 0.25);
     filter: blur(1px);
     transform: translateY(2px);
+    pointer-events: none;
 }
 
 .edge {
@@ -136,6 +144,7 @@ body {
     hsl(340deg 100% 32%) 92%,
     hsl(340deg 100% 16%) 100%
   );
+    pointer-events: none;
 }
 
 .front {
