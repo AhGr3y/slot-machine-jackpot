@@ -17,15 +17,18 @@ const spinDuration = 6000;
 
 let slotNumber = 1;
 let slotTokensHeight = 0;
+let lastToken = "";
 
 // Spin one slot at a time.
 // When all slots have tokens, change to 'Clear' button,
 // which will empty all slots but keep jackpot the same.
 spinButton.addEventListener("click", (event) => {
-    if (slotNumber <= totalSlots) {
-        let slot = document.querySelector(`#slot-${slotNumber}`);
+    if (spinButtonText.textContent !== "Clear") {
+        spinButton.disabled = true;
+        const slot = document.querySelector(`#slot-${slotNumber}`);
         fillSlot(slot);
-        slot.animate(
+        const currentToken = slot.lastChild.textContent;
+        const animation = slot.animate(
             [
                 { transform: "translateY(0)" },
                 { transform: `translateY(-${slotTokensHeight - (slotTokensHeight / numOfTokens)}px)` },
@@ -37,13 +40,31 @@ spinButton.addEventListener("click", (event) => {
             },
         );
 
-        slotNumber += 1;
-        slotTokensHeight = 0;
+        animation.onfinish = () => {
+            // Handle 3rd spin
+            if (slotNumber === totalSlots) {
+                // All 3 tokens identical
+                if (lastToken === currentToken) {
+                    console.log("You win!");
+                } else { // All 3 tokens not identical
+                    console.log("You lose!");  
+                }
 
-        if (slotNumber > totalSlots) {
-            spinButtonText.textContent = "Clear";
-        }
-    } else  {
+                spinButtonText.textContent = "Clear";
+            } else { // Handle first 2 spins
+                // Round ends if first 2 tokens unidentical
+                if (lastToken && lastToken !== currentToken) {
+                    console.log("You lose!");
+                    spinButtonText.textContent = "Clear";
+                } else { // Continue round if first 2 tokens identical
+                    slotTokensHeight = 0;
+                    lastToken = currentToken;
+                    slotNumber += 1;
+                }
+            }
+            spinButton.disabled = false;
+        };
+    } else { // spinButtonText.textContent === "Clear"
         clearSlots();
     }
 });
@@ -107,4 +128,6 @@ function clearSlots() {
 
     slotNumber = 1;
     spinButtonText.textContent = "Spin";
+    lastToken = "";
+    slotTokensHeight = 0;
 }
