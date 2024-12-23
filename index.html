@@ -31,7 +31,10 @@
 
     <div id="incrementer-container">
         <button id="decrementer">-</button>
-        <input id="amount-to-change" type="text" value="0" onfocus="this.select()">
+        <div class="input-container">
+            <span class="prefix">$</span>
+            <input id="amount-to-change" type="text" value="0" placeholder="0" onfocus="this.select()">
+        </div>
         <button id="incrementer">+</button>
     </div>
 

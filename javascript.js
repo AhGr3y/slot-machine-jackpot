@@ -1,7 +1,7 @@
 const tokens = [
     "✊",
-    "🖐️",
-    "✌️",
+    // "🖐️",
+    // "✌️",
 ];
 
 const jackpot = document.querySelector("#counter");
@@ -15,6 +15,7 @@ const tokenSize = 150;
 const totalSlots = 3;
 const spinDuration = 6000;
 
+let userWon = false;
 let slotNumber = 1;
 let slotTokensHeight = 0;
 let lastToken = "";
@@ -24,6 +25,7 @@ let lastToken = "";
 // which will empty all slots but keep jackpot the same.
 spinButton.addEventListener("click", (event) => {
     if (spinButtonText.textContent !== "Clear") {
+        spinButton.style.opacity = "50%";
         spinButton.disabled = true;
         const slot = document.querySelector(`#slot-${slotNumber}`);
         fillSlot(slot);
@@ -46,6 +48,7 @@ spinButton.addEventListener("click", (event) => {
                 // All 3 tokens identical
                 if (lastToken === currentToken) {
                     console.log("You win!");
+                    userWon = true;
                 } else { // All 3 tokens not identical
                     console.log("You lose!");  
                 }
@@ -62,9 +65,14 @@ spinButton.addEventListener("click", (event) => {
                     slotNumber += 1;
                 }
             }
+            
+            spinButton.style.opacity = "100%";
             spinButton.disabled = false;
         };
-    } else { // spinButtonText.textContent === "Clear"
+    } else { // When button text becomes 'Clear'
+        if (userWon) {
+            clearJackpot();
+        }
         clearSlots();
     }
 });
@@ -96,6 +104,12 @@ function adjustJackpot(adjustType) {
     }
 
     jackpot.textContent = newCounter;
+}
+
+function clearJackpot() {
+    jackpot.textContent = 0;
+    userWon = false;
+    amountToChange.value = "";
 }
 
 function getRandomToken() {
