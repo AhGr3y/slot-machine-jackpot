@@ -72,8 +72,10 @@ spinButton.addEventListener("click", (event) => {
         if (userWon) {
             clearJackpot();
         }
+        if (winMsgAnimation) {
+            winMsgAnimation.cancel();
+        }
         clearSlots();
-        winMsgAnimation.cancel();
     }
 });
 
