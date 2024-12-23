@@ -1,7 +1,7 @@
 const tokens = [
     "✊",
-    // "🖐️",
-    // "✌️",
+    "🖐️",
+    "✌️",
 ];
 
 const jackpot = document.querySelector("#counter");
