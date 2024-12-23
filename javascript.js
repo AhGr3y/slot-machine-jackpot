@@ -49,15 +49,12 @@ spinButton.addEventListener("click", (event) => {
                 if (lastToken === currentToken) {
                     console.log("You win!");
                     userWon = true;
-                } else { // All 3 tokens not identical
-                    console.log("You lose!");  
                 }
 
                 spinButtonText.textContent = "Clear";
             } else { // Handle first 2 spins
                 // Round ends if first 2 tokens unidentical
                 if (lastToken && lastToken !== currentToken) {
-                    console.log("You lose!");
                     spinButtonText.textContent = "Clear";
                 } else { // Continue round if first 2 tokens identical
                     slotTokensHeight = 0;
