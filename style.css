@@ -79,6 +79,15 @@ body {
     z-index: -1;
 }
 
+#winning-message {
+  position: absolute;
+  font-size: 120px;
+  background: none;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+}
+
 #counter-container {
     font-size: 70px;
 }

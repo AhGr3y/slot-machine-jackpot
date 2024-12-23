@@ -5,6 +5,7 @@ const tokens = [
 ];
 
 const jackpot = document.querySelector("#counter");
+const winningMessage = document.querySelector("#winning-message");
 const spinButton = document.querySelector(".pushable");
 const spinButtonText = document.querySelector("#pushable-text");
 const amountToChange = document.querySelector("#amount-to-change");
@@ -15,6 +16,7 @@ const tokenSize = 150;
 const totalSlots = 3;
 const spinDuration = 6000;
 
+let winMsgAnimation;
 let userWon = false;
 let slotNumber = 1;
 let slotTokensHeight = 0;
@@ -47,7 +49,7 @@ spinButton.addEventListener("click", (event) => {
             if (slotNumber === totalSlots) {
                 // All 3 tokens identical
                 if (lastToken === currentToken) {
-                    console.log("You win!");
+                    winMsgAnimation = displayWinningMessage();
                     userWon = true;
                 }
 
@@ -71,6 +73,7 @@ spinButton.addEventListener("click", (event) => {
             clearJackpot();
         }
         clearSlots();
+        winMsgAnimation.cancel();
     }
 });
 
@@ -141,4 +144,18 @@ function clearSlots() {
     spinButtonText.textContent = "Spin";
     lastToken = "";
     slotTokensHeight = 0;
+}
+
+function displayWinningMessage() {
+    return winningMessage.animate(
+        [
+            { transform: "scale(0)", opacity: 0 },
+            { transform: "scale(1.0)", opacity: 1 },
+        ],
+        {
+            duration: 200,
+            easing: "ease-in",
+            fill: "forwards",
+        },
+    );
 }
