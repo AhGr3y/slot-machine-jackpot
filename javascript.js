@@ -4,6 +4,8 @@ const tokens = [
     "✌️",
 ];
 
+const buttonPressSound = document.querySelector("#button-press-sound");
+const clickSound = document.querySelector("#click-sound");
 const jackpot = document.querySelector("#counter");
 const winningMessage = document.querySelector("#winning-message");
 const spinButton = document.querySelector(".pushable");
@@ -16,22 +18,36 @@ const tokenSize = 150;
 const totalSlots = 3;
 const spinDuration = 6000;
 
-let winMsgAnimation;
+let spinOveride = false;
 let userWon = false;
 let slotNumber = 1;
 let slotTokensHeight = 0;
 let lastToken = "";
+let slotHeight = 0;
+let winMsgAnimation;
+let tempSlot;
+let oldSlotHeight;
 
 // Spin one slot at a time.
 // When all slots have tokens, change to 'Clear' button,
 // which will empty all slots but keep jackpot the same.
 spinButton.addEventListener("click", (event) => {
+    buttonPressSound.play();
+    if (spinOveride) { // Spin all three slots at once
+        console.log("OVERRIDE!");
+        return;
+    }
     if (spinButtonText.textContent !== "Clear") {
         spinButton.style.opacity = "50%";
         spinButton.disabled = true;
         const slot = document.querySelector(`#slot-${slotNumber}`);
         fillSlot(slot);
         const currentToken = slot.lastChild.textContent;
+
+        tempSlot = slot;
+        oldSlotHeight = getYPosition(slot) + (230 / 2);
+        console.log(oldSlotHeight);
+
         const animation = slot.animate(
             [
                 { transform: "translateY(0)" },
@@ -43,6 +59,8 @@ spinButton.addEventListener("click", (event) => {
                 fill: "forwards",
             },
         );
+
+        playAudioPerToken(slot);
 
         animation.onfinish = () => {
             // Handle 3rd spin
@@ -160,4 +178,25 @@ function displayWinningMessage() {
             fill: "forwards",
         },
     );
+}
+
+function getYPosition(slot) {
+    return slot.getBoundingClientRect().y;
+}
+
+function playAudioPerToken() {
+    const rect = tempSlot.getBoundingClientRect();
+    const top = rect.top;
+
+    if (Math.abs(top - oldSlotHeight) >= 245) {
+        playClickSound();
+        oldSlotHeight = top;
+    }
+
+    requestAnimationFrame(playAudioPerToken);
+}
+
+function playClickSound() {
+    const soundClone = clickSound.cloneNode();
+    soundClone.play();
 }
