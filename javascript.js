@@ -1,7 +1,7 @@
 const tokens = [
     "✊",
-    "🖐️",
-    "✌️",
+    // "🖐️",
+    // "✌️",
 ];
 
 // Audio
@@ -9,20 +9,25 @@ const buttonPressSound = document.querySelector("#button-press-sound");
 const clickSound = document.querySelector("#click-sound");
 const coinsFalling = document.querySelector("#coins-falling");
 const winner = document.querySelector("#winner");
-
+// Jackpot
 const jackpot = document.querySelector("#counter");
+// Display
 const winningMessage = document.querySelector("#winning-message");
+// Spin button
 const spinButton = document.querySelector(".pushable");
 const spinButtonText = document.querySelector("#pushable-text");
+// Jackpot incrementer/decrementer
 const amountToChange = document.querySelector("#amount-to-change");
 const incrementer = document.querySelector("#incrementer");
 const decrementer = document.querySelector("#decrementer");
+// Slots
 const numOfTokens = 32;
 const tokenSize = 150;
 const totalSlots = 3;
-const spinDuration = 6000;
+const defaultSpinDuration = 6000;
+// Override
+const overrideButton = document.querySelector("#override");
 
-let spinOveride = false;
 let userWon = false;
 let slotNumber = 1;
 let slotTokensHeight = 0;
@@ -31,41 +36,22 @@ let slotHeight = 0;
 let winMsgAnimation;
 let tempSlot;
 let oldSlotHeight;
+let currentToken = "";
+let spinDuration = 6000;
+let override = false;
 
-// Spin one slot at a time.
-// When all slots have tokens, change to 'Clear' button,
-// which will empty all slots but keep jackpot the same.
+// Configure slot spin behavior
 spinButton.addEventListener("click", (event) => {
     buttonPressSound.play();
-    if (spinOveride) { // Spin all three slots at once
-        console.log("OVERRIDE!");
-        return;
+    if (override) {
+        spinAllSlots();
     }
     if (spinButtonText.textContent !== "Clear") {
         spinButton.style.opacity = "50%";
         spinButton.disabled = true;
-        const slot = document.querySelector(`#slot-${slotNumber}`);
-        fillSlot(slot);
-        const currentToken = slot.lastChild.textContent;
-
-        tempSlot = slot;
-        oldSlotHeight = getYPosition(slot) + (230 / 2);
-        console.log(oldSlotHeight);
-
-        const animation = slot.animate(
-            [
-                { transform: "translateY(0)" },
-                { transform: `translateY(-${slotTokensHeight - (slotTokensHeight / numOfTokens)}px)` },
-            ],
-            {
-                duration: spinDuration,
-                easing: "cubic-bezier(0.42, 0, 0.1, 1.03)",
-                fill: "forwards",
-            },
-        );
-
-        playAudioPerToken(slot);
-
+        const animation = spinSingleSlot();
+        slotNumber--;
+        
         animation.onfinish = () => {
             // Handle 3rd spin
             if (slotNumber === totalSlots) {
@@ -76,19 +62,15 @@ spinButton.addEventListener("click", (event) => {
                     coinsFalling.play();
                     userWon = true;
                 }
-
                 spinButtonText.textContent = "Clear";
             } else { // Handle first 2 spins
                 // Round ends if first 2 tokens unidentical
                 if (lastToken && lastToken !== currentToken) {
                     spinButtonText.textContent = "Clear";
-                } else { // Continue round if first 2 tokens identical
-                    slotTokensHeight = 0;
-                    lastToken = currentToken;
-                    slotNumber += 1;
                 }
             }
             
+            slotNumber++
             spinButton.style.opacity = "100%";
             spinButton.disabled = false;
         };
@@ -99,7 +81,21 @@ spinButton.addEventListener("click", (event) => {
         if (winMsgAnimation) {
             winMsgAnimation.cancel();
         }
+        spinDuration = defaultSpinDuration;
         clearSlots();
+    }
+});
+
+// Switch slot spin behavior between:
+// - Spin all three
+// - Spin one by one
+overrideButton.addEventListener("click", () => {
+    override = !override;
+    const buttonText = overrideButton.textContent;
+    if (buttonText[0] === "1") {
+        overrideButton.textContent = `3${buttonText.slice(1)}`;
+    } else if (buttonText[0] === "3") {
+        overrideButton.textContent = `1${buttonText.slice(1)}`;
     }
 });
 
@@ -169,6 +165,7 @@ function clearSlots() {
     slotNumber = 1;
     spinButtonText.textContent = "Spin";
     lastToken = "";
+    currentToken = "";
     slotTokensHeight = 0;
 }
 
@@ -205,4 +202,40 @@ function playAudioPerToken() {
 function playClickSound() {
     const soundClone = clickSound.cloneNode();
     soundClone.play();
+}
+
+function spinAllSlots() {
+    for (let i = 1; i <= totalSlots; i++) {
+        spinSingleSlot();
+        spinDuration+= 800;
+    }  
+}
+
+function spinSingleSlot() {
+    const slot = document.querySelector(`#slot-${slotNumber}`);
+    fillSlot(slot);
+    lastToken = currentToken;
+    currentToken = slot.lastChild.textContent;
+
+    // For configuring slot tick sound timings
+    tempSlot = slot;
+    oldSlotHeight = getYPosition(slot) + (230 / 2);
+
+    const animation = slot.animate(
+        [
+            { transform: "translateY(0)" },
+            { transform: `translateY(-${slotTokensHeight - (slotTokensHeight / numOfTokens)}px)` },
+        ],
+        {
+            duration: spinDuration,
+            easing: "cubic-bezier(0.42, 0, 0.1, 1.03)",
+            fill: "forwards",
+        },
+    );
+    playAudioPerToken(slot);
+
+    slotTokensHeight = 0;
+    slotNumber += 1;
+
+    return animation;
 }

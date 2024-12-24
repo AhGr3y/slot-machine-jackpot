@@ -282,3 +282,15 @@ body {
       text-shadow: 0 0 20px #ff47c8ea, 0 0 30px #ff47c8ea, 0 0 40px #ff47c8ea, 0 0 50px #ff47c8ea, 0 0 60px #ff47c8ea, 0 0 70px #ff47c8ea, 0 0 80px #ff47c8ea;
     }
   }
+
+  #override {
+    position: absolute;
+    left: 97%;
+    top: 96%;
+    background: none;
+    border: none;
+  }
+
+  #override:hover {
+    cursor: pointer;
+  }
