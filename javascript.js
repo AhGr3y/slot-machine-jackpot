@@ -39,14 +39,33 @@ let oldSlotHeight;
 let currentToken = "";
 let spinDuration = 6000;
 let override = false;
+let roundTokens = [];
 
 // Configure slot spin behavior
 spinButton.addEventListener("click", (event) => {
     buttonPressSound.play();
     if (spinButtonText.textContent !== "Clear") {
         if (override) {
-            spinAllSlots();
-            spinButtonText.textContent = "Clear";
+            spinButton.style.opacity = "50%";
+            spinButton.disabled = true;
+            const lastAnimation = spinAllSlots();
+
+            userWon = true;
+            for (let i = 0; i < totalSlots - 1; i++) {
+                if (roundTokens[i] !== roundTokens[i + 1]) {
+                    userWon = false;
+                    break;
+                } 
+            }
+
+            lastAnimation.onfinish = () => {
+                if (userWon) {
+                    celebrate();
+                }
+                spinButtonText.textContent = "Clear";
+                spinButton.style.opacity = "100%";
+                spinButton.disabled = false;
+            };
         } else {
             spinButton.style.opacity = "50%";
             spinButton.disabled = true;
@@ -58,10 +77,7 @@ spinButton.addEventListener("click", (event) => {
                 if (slotNumber === totalSlots) {
                     // All 3 tokens identical
                     if (lastToken === currentToken) {
-                        winMsgAnimation = displayWinningMessage();
-                        winner.play();
-                        coinsFalling.play();
-                        userWon = true;
+                        celebrate();
                     }
                     spinButtonText.textContent = "Clear";
                 } else { // Handle first 2 spins
@@ -84,6 +100,7 @@ spinButton.addEventListener("click", (event) => {
             winMsgAnimation.cancel();
         }
         spinDuration = defaultSpinDuration;
+        roundTokens = [];
         clearSlots();
     }
 });
@@ -212,10 +229,15 @@ function playClickSound() {
 }
 
 function spinAllSlots() {
+    let lastAnimation;
     for (let i = 1; i <= totalSlots; i++) {
-        spinSingleSlot();
+        const animation = spinSingleSlot();
         spinDuration+= 800;
-    }  
+        if (i === totalSlots) {
+            lastAnimation = animation;
+        }
+    }
+    return lastAnimation; 
 }
 
 function spinSingleSlot() {
@@ -223,6 +245,7 @@ function spinSingleSlot() {
     fillSlot(slot);
     lastToken = currentToken;
     currentToken = slot.lastChild.textContent;
+    roundTokens.push(currentToken);
 
     // For configuring slot tick sound timings
     tempSlot = slot;
@@ -246,3 +269,10 @@ function spinSingleSlot() {
 
     return animation;
 }
+
+function celebrate() {
+    winMsgAnimation = displayWinningMessage();
+    winner.play();
+    coinsFalling.play();
+    userWon = true;
+} 
