@@ -4,8 +4,12 @@ const tokens = [
     "✌️",
 ];
 
+// Audio
 const buttonPressSound = document.querySelector("#button-press-sound");
 const clickSound = document.querySelector("#click-sound");
+const coinsFalling = document.querySelector("#coins-falling");
+const winner = document.querySelector("#winner");
+
 const jackpot = document.querySelector("#counter");
 const winningMessage = document.querySelector("#winning-message");
 const spinButton = document.querySelector(".pushable");
@@ -68,6 +72,8 @@ spinButton.addEventListener("click", (event) => {
                 // All 3 tokens identical
                 if (lastToken === currentToken) {
                     winMsgAnimation = displayWinningMessage();
+                    winner.play();
+                    coinsFalling.play();
                     userWon = true;
                 }
 
