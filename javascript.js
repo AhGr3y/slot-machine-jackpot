@@ -43,38 +43,40 @@ let override = false;
 // Configure slot spin behavior
 spinButton.addEventListener("click", (event) => {
     buttonPressSound.play();
-    if (override) {
-        spinAllSlots();
-    }
     if (spinButtonText.textContent !== "Clear") {
-        spinButton.style.opacity = "50%";
-        spinButton.disabled = true;
-        const animation = spinSingleSlot();
-        slotNumber--;
-        
-        animation.onfinish = () => {
-            // Handle 3rd spin
-            if (slotNumber === totalSlots) {
-                // All 3 tokens identical
-                if (lastToken === currentToken) {
-                    winMsgAnimation = displayWinningMessage();
-                    winner.play();
-                    coinsFalling.play();
-                    userWon = true;
-                }
-                spinButtonText.textContent = "Clear";
-            } else { // Handle first 2 spins
-                // Round ends if first 2 tokens unidentical
-                if (lastToken && lastToken !== currentToken) {
-                    spinButtonText.textContent = "Clear";
-                }
-            }
+        if (override) {
+            spinAllSlots();
+            spinButtonText.textContent = "Clear";
+        } else {
+            spinButton.style.opacity = "50%";
+            spinButton.disabled = true;
+            const animation = spinSingleSlot();
+            slotNumber--;
             
-            slotNumber++
-            spinButton.style.opacity = "100%";
-            spinButton.disabled = false;
-        };
-    } else { // When button text becomes 'Clear'
+            animation.onfinish = () => {
+                // Handle 3rd spin
+                if (slotNumber === totalSlots) {
+                    // All 3 tokens identical
+                    if (lastToken === currentToken) {
+                        winMsgAnimation = displayWinningMessage();
+                        winner.play();
+                        coinsFalling.play();
+                        userWon = true;
+                    }
+                    spinButtonText.textContent = "Clear";
+                } else { // Handle first 2 spins
+                    // Round ends if first 2 tokens unidentical
+                    if (lastToken && lastToken !== currentToken) {
+                        spinButtonText.textContent = "Clear";
+                    }
+                }
+                
+                slotNumber++
+                spinButton.style.opacity = "100%";
+                spinButton.disabled = false;
+            };
+        }
+    } else {
         if (userWon) {
             clearJackpot();
         }
@@ -90,6 +92,11 @@ spinButton.addEventListener("click", (event) => {
 // - Spin all three
 // - Spin one by one
 overrideButton.addEventListener("click", () => {
+    // Disable button in between rounds
+    if (currentToken !== "") {
+        return;
+    }
+
     override = !override;
     const buttonText = overrideButton.textContent;
     if (buttonText[0] === "1") {
