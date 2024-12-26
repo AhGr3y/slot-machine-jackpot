@@ -1,8 +1,8 @@
 // Tokens
 const tokens = [
-    "✊",
-    "🖐️",
-    "✌️",
+    "✈️",
+    "🚢",
+    "🚛",
 ];
 // Audio
 const buttonPressSound = document.querySelector("#button-press-sound");
