@@ -1,9 +1,9 @@
+// Tokens
 const tokens = [
     "✊",
     "🖐️",
     "✌️",
 ];
-
 // Audio
 const buttonPressSound = document.querySelector("#button-press-sound");
 const clickSound = document.querySelector("#click-sound");
@@ -27,6 +27,9 @@ const totalSlots = 3;
 const defaultSpinDuration = 6000;
 // Override
 const overrideButton = document.querySelector("#override");
+// Rig the game; one of these rounds will be rigged at random
+// Put [-1] to disable this
+const riggedRoundChoices = [8, 9, 10];
 
 let userWon = false;
 let slotNumber = 1;
@@ -40,6 +43,10 @@ let currentToken = "";
 let spinDuration = 6000;
 let override = false;
 let roundTokens = [];
+let roundNum = 1;
+let riggedToken = createToken();
+let riggedRoundIndex = Math.floor(Math.random() * riggedRoundChoices.length);
+let riggedRound = riggedRoundChoices[riggedRoundIndex];
 
 // Configure slot spin behavior
 spinButton.addEventListener("click", (event) => {
@@ -57,7 +64,7 @@ spinButton.addEventListener("click", (event) => {
                     break;
                 } 
             }
-
+            
             lastAnimation.onfinish = () => {
                 if (userWon) {
                     celebrate();
@@ -95,12 +102,18 @@ spinButton.addEventListener("click", (event) => {
     } else {
         if (userWon) {
             clearJackpot();
+            roundNum = 1;
+            riggedRoundIndex = Math.floor(Math.random() * riggedRoundChoices.length);
+            riggedRound = riggedRoundChoices[riggedRoundIndex];
+        } else {
+            roundNum++;
         }
         if (winMsgAnimation) {
             winMsgAnimation.cancel();
         }
         spinDuration = defaultSpinDuration;
         roundTokens = [];
+        riggedToken = createToken();
         clearSlots();
     }
 });
@@ -172,9 +185,13 @@ function createToken() {
 }
 
 // Append tokens to slot randomly, and update slotTokensHeight.
+// Rig the slots in the 10th spin.
 function fillSlot(slot) {
     for (let i = 0; i < numOfTokens; i++) {
         const token = createToken();
+        if (i === (numOfTokens - 1) && roundNum === riggedRound) {
+            token.textContent = riggedToken.textContent;
+        }
         slot.appendChild(token);
         slotTokensHeight += token.clientHeight;
     }
@@ -275,4 +292,4 @@ function celebrate() {
     winner.play();
     coinsFalling.play();
     userWon = true;
-} 
+}
