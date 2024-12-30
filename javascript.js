@@ -72,6 +72,7 @@ spinButton.addEventListener("click", (event) => {
                 spinButtonText.textContent = "Clear";
                 spinButton.style.opacity = "100%";
                 spinButton.disabled = false;
+                spinButton.focus();
             };
         } else {
             spinButton.style.opacity = "50%";
@@ -97,6 +98,7 @@ spinButton.addEventListener("click", (event) => {
                 slotNumber++
                 spinButton.style.opacity = "100%";
                 spinButton.disabled = false;
+                spinButton.focus();
             };
         }
     } else {
